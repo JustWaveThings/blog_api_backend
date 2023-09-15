@@ -6,23 +6,60 @@ import logger from 'morgan';
 import compression from 'compression';
 import helmet from 'helmet';
 import cors from 'cors';
-import rateLimit from 'express-rate-limit';
+import createErrors from 'http-errors';
+import passport from 'passport';
+import session from 'express-session';
+import MongoStore from 'connect-mongodb-session';
+
+import database from './utils/database';
+import rateLimit from './utils/rateLimit';
+import passportConfig from './utils/passport';
 
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
 
 const app = express();
 
-//Rate Limiting
-const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 50, // 50 requests,
-  message: 'Too many requests, please try again later.',
-});
-app.use(limiter);
-
 app.use(cors()); //Enable CORS
-app.use(helmet()); //Protects against well known vulnerabilities
+
+app.use(rateLimit); //Rate Limiting
+
+app.use(database); //Database Connection
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      'script-src': 'self',
+    },
+  })
+);
+
+const store = new MongoStore({
+  uri: `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@cluster0.dmc0his.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
+  collection: 'sessions',
+});
+
+store.on('error', function (error) {
+  console.log(error);
+});
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    store: store,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    },
+  })
+);
+
+// Passport
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.urlencoded({ extended: false }));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -35,5 +72,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+app.use(function (req, res, next) {
+  next(createErrors(404));
+});
+
+app.use(function (err, req, res, next) {
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {}; // only providing error in development
+});
 
 export default app;

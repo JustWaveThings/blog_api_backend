@@ -1,0 +1,29 @@
+{
+  "name": "blog-api-backend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon --exec babel-node ./bin/www"
+  },
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.3.1",
+    "express": "~4.16.1",
+    "helmet": "^7.0.0",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "nodemon": "^3.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.19",
+    "@babel/node": "^7.22.19",
+    "@babel/preset-env": "^7.22.15"
+  },
+  "main": "app.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

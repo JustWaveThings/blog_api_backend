@@ -2,10 +2,14 @@ import User from '../models/users';
 import { body, validationResult } from 'express-validator';
 import asyncHandler from 'express-async-handler';
 
-export const index1 = asyncHandler(async (req, res, next) => {
-  res.json({ title: 'user Overview' });
+export const get_user = asyncHandler(async (req, res, next) => {
+  res.json({ title: 'get user' });
 });
 
-export const index2 = asyncHandler(async (req, res, next) => {
-  res.json({ title: 'user Overview 2' });
+export const create_user = asyncHandler(async (req, res, next) => {
+  res.json({ title: 'create user' });
+});
+
+export const update_user = asyncHandler(async (req, res, next) => {
+  res.json({ title: 'update user' });
 });

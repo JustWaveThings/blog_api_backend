@@ -1,9 +1,9 @@
 import express from 'express';
 const router = express.Router();
+import index_controller from '../controllers/index_controller.js';
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  res.send('NOT IMPLEMENTED: homepage');
-});
+router.get('/', index_controller.index);
+
+router.get('/2', index_controller.index2);
 
 export default router;

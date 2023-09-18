@@ -8,7 +8,7 @@ import logger from 'morgan';
 // import cors from 'cors';
 import createErrors from 'http-errors';
 // import passport from 'passport';
-import session from 'express-session';
+// import session from 'express-session';
 // import MongoStore from 'connect-mongodb-session';
 
 import database from './utils/database';
@@ -45,18 +45,6 @@ app.use(database); //Database Connection
 store.on('error', function (error) {
   console.log(error);
 }); */
-
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: true,
-    saveUninitialized: true,
-    /* store: store, */
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-    },
-  })
-);
 
 // Passport
 

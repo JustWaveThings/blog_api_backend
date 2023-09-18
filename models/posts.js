@@ -1,8 +1,12 @@
 import mongoose from 'mongoose';
 import { Schema } from 'mongoose';
-// import createSlug from '../utils/slug';
+import slug from 'mongoose-slug-generator';
 
-// createSlug();
+const slug_options = {
+  truncate: 120,
+};
+
+mongoose.plugin(slug, slug_options);
 
 const PostSchema = new Schema({
   title: { type: String, required: true, max: 250 },
@@ -13,7 +17,7 @@ const PostSchema = new Schema({
   updated_timestamp: { type: Date, required: false },
   published_timestamp: { type: Date, required: false },
   comment_array: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-  // slug: { type: String, slug: ['title', 'subtitle'], slug_padding_size: 3, unique: true },
+  slug: { type: String, slug: ['title', 'subtitle'], slug_padding_size: 3, unique: true },
 });
 
 // virtual for comment count

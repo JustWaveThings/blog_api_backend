@@ -3,17 +3,17 @@ import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import compression from 'compression';
-import helmet from 'helmet';
-import cors from 'cors';
+// import compression from 'compression';
+// import helmet from 'helmet';
+// import cors from 'cors';
 import createErrors from 'http-errors';
-import passport from 'passport';
+// import passport from 'passport';
 import session from 'express-session';
-import MongoStore from 'connect-mongodb-session';
+// import MongoStore from 'connect-mongodb-session';
 
 import database from './utils/database';
-import rateLimit from './utils/rateLimit';
-import passportConfig from './utils/passport';
+// import rateLimit from './utils/rateLimit';
+// import passportConfig from './utils/passport';
 
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
@@ -35,23 +35,23 @@ app.use(database); //Database Connection
   })
 ); */
 
-const MongoStoreSession = MongoStore(session);
+// const MongoStoreSession = MongoStore(session);
 
-const store = new MongoStoreSession({
+/* const store = new MongoStoreSession({
   uri: `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@cluster0.dmc0his.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
   collection: 'sessions',
 });
 
 store.on('error', function (error) {
   console.log(error);
-});
+}); */
 
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
-    store: store,
+    /* store: store, */
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     },

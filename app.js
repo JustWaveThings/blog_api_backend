@@ -17,24 +17,27 @@ import passportConfig from './utils/passport';
 
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
+import postsRouter from './routes/posts';
 
 const app = express();
 
-app.use(cors()); //Enable CORS
+// app.use(cors()); //Enable CORS
 
-app.use(rateLimit); //Rate Limiting
+// app.use(rateLimit); //Rate Limiting
 
 app.use(database); //Database Connection
 
-app.use(
+/* app.use(
   helmet.contentSecurityPolicy({
     directives: {
       'script-src': 'self',
     },
   })
-);
+); */
 
-const store = new MongoStore({
+const MongoStoreSession = MongoStore(session);
+
+const store = new MongoStoreSession({
   uri: `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@cluster0.dmc0his.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
   collection: 'sessions',
 });
@@ -57,20 +60,20 @@ app.use(
 
 // Passport
 
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(express.urlencoded({ extended: false }));
+// app.use(passport.initialize());
+// app.use(passport.session());
+// app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
-
 app.use(logger('dev'));
-
-app.use(compression()); //Compress all routes
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/posts', postsRouter);
+
+// app.use(compression()); //Compress all routes
 
 app.use(function (req, res, next) {
   next(createErrors(404));

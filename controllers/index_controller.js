@@ -1,9 +1,10 @@
 /* GET home page. */
-const index = function (req, res, next) {
-  res.send('NOT IMPLEMENTED: homepage');
-};
+import asyncHandler from 'express-async-handler';
 
-const index2 = function (req, res, next) {
-  res.send('NOT IMPLEMENTED: homepage2');
-};
-export default { index, index2 };
+export const index = asyncHandler(async (req, res, next) => {
+  res.json({ title: 'homepage Overview' });
+});
+
+export const index2 = asyncHandler(async (req, res, next) => {
+  res.json({ title: 'homepage Overview 2' });
+});

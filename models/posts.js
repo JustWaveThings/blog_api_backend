@@ -16,11 +16,6 @@ const PostSchema = new Schema({
   slug: { type: String, slug: ['title', 'subtitle'], slug_padding_size: 3, unique: true },
 });
 
-// virtual for post's URL
-PostSchema.virtual('url').get(function () {
-  return '/posts/' + this.slug;
-});
-
 // virtual for comment count
 PostSchema.virtual('comment_count').get(function () {
   return this.comment_array.length;
@@ -28,7 +23,7 @@ PostSchema.virtual('comment_count').get(function () {
 
 // virtual for post age
 
-PostSchema.virtual('age').get(function () {
+PostSchema.virtual('post_age').get(function () {
   return Date.now() - this.published_timestamp;
 });
 

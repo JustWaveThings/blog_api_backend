@@ -68,8 +68,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (err, req, res, next) {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {}; // only providing error in development
+  res.locals.error = req.app.get('env') === 'development' ? res.json(err.message) : {}; // only providing error in development
 });
 
 export default app;

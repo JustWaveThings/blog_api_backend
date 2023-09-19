@@ -12,6 +12,6 @@ router.post('/', user_controller.create_user);
 
 // update user
 
-router.put('/', user_controller.update_user);
+router.put('/:userid', user_controller.update_user);
 
 export default router;

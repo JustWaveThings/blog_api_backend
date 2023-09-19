@@ -8,8 +8,8 @@ import logger from 'morgan';
 // import cors from 'cors';
 import createErrors from 'http-errors';
 // import passport from 'passport';
-// import session from 'express-session';
-// import MongoStore from 'connect-mongodb-session';
+import session from 'express-session';
+import MongoStore from 'connect-mongodb-session';
 
 import database from './utils/database';
 // import rateLimit from './utils/rateLimit';
@@ -35,22 +35,22 @@ app.use(database); //Database Connection
   })
 ); */
 
-// const MongoStoreSession = MongoStore(session);
+const MongoStoreSession = MongoStore(session);
 
-/* const store = new MongoStoreSession({
+const store = new MongoStoreSession({
   uri: `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@cluster0.dmc0his.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
   collection: 'sessions',
 });
 
 store.on('error', function (error) {
   console.log(error);
-}); */
+});
 
 // Passport
 
 // app.use(passport.initialize());
 // app.use(passport.session());
-// app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(logger('dev'));

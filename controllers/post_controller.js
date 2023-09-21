@@ -47,7 +47,7 @@ export const create_post = [
 
 export const update_post = asyncHandler(async (req, res) => {
   // const post = await Post.findById(req.params.postid);
-  res.json({ title: 'Update Post' });
+  res.json({ message: 'Update Post not yet implmented' });
 });
 
 // delete post

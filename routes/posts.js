@@ -30,7 +30,7 @@ router.post('/:postid/comment', comment_controller.create_comment);
 
 router.put('/:postid/comment/:commentid', comment_controller.update_comment);
 
-// delete comment (only by admin)
+// delete comment
 
 router.delete('/:postid/comment/:commentid', comment_controller.delete_comment);
 

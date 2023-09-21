@@ -7,6 +7,7 @@ const CommentSchema = new Schema({
   reported: { type: Boolean, required: true, default: false },
   published_timestamp: { type: Date, required: true, default: Date.now() },
   parent_post: { type: Schema.Types.ObjectId, ref: 'Post', required: true },
+  likes: { type: Number, required: true, default: 0 },
 });
 
 // virtual for comment age

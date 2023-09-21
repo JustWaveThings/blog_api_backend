@@ -26,16 +26,12 @@ router.delete('/:postid', post_controller.delete_post);
 
 router.post('/:postid/comment', comment_controller.create_comment);
 
-// update comment (so it can be flagged as inappropriate)
+// update comment (so it can be flagged as inappropriate / update likes)
 
 router.put('/:postid/comment/:commentid', comment_controller.update_comment);
 
 // delete comment (only by admin)
 
 router.delete('/:postid/comment/:commentid', comment_controller.delete_comment);
-
-// get comments for post
-
-router.get('/:postid/comment', comment_controller.get_comments);
 
 export default router;

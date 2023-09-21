@@ -4,7 +4,8 @@ import asyncHandler from 'express-async-handler';
 
 // get all posts overview (no body, just metadata)
 export const post_list_overview = asyncHandler(async (req, res) => {
-  const posts = await Post.find({}, 'title subtitle published created_timestamp comment_count');
+  // exclude posts with the published flag set to false
+  const posts = await Post.find({ published: true }, 'title subtitle created_timestamp comment_count');
   res.json({ posts });
 });
 

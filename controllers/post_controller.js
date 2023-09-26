@@ -13,7 +13,7 @@ export const post_list_overview = asyncHandler(async (req, res) => {
 
 export const post_detail = asyncHandler(async (req, res) => {
   console.log(req.params.id);
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.id).populate('comment_array');
   res.json(post);
 });
 

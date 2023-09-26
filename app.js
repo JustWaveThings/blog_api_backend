@@ -3,16 +3,16 @@ import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-// import compression from 'compression';
-// import helmet from 'helmet';
-// import cors from 'cors';
+import compression from 'compression';
+import helmet from 'helmet';
+import cors from 'cors';
 import createErrors from 'http-errors';
 // import passport from 'passport';
 import session from 'express-session';
 import MongoStore from 'connect-mongodb-session';
 
 import database from './utils/database';
-// import rateLimit from './utils/rateLimit';
+import rateLimit from './utils/rateLimit';
 // import passportConfig from './utils/passport';
 
 import indexRouter from './routes/index';
@@ -21,19 +21,19 @@ import postsRouter from './routes/posts';
 
 const app = express();
 
-// app.use(cors()); //Enable CORS
+app.use(cors()); //Enable CORS
 
-// app.use(rateLimit); //Rate Limiting
+app.use(rateLimit); //Rate Limiting
 
 app.use(database); //Database Connection
 
-/* app.use(
+app.use(
   helmet.contentSecurityPolicy({
     directives: {
       'script-src': 'self',
     },
   })
-); */
+);
 
 const MongoStoreSession = MongoStore(session);
 
@@ -61,14 +61,10 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 
-// app.use(compression()); //Compress all routes
+app.use(compression()); //Compress all routes
 
 app.use(function (req, res, next) {
   next(createErrors(404));
-});
-
-app.use(function (err, req, res, next) {
-  res.locals.error = req.app.get('env') === 'development' ? res.json(err.message) : {}; // only providing error in development
 });
 
 export default app;

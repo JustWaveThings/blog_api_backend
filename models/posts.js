@@ -1,8 +1,5 @@
 import mongoose from 'mongoose';
 import { Schema } from 'mongoose';
-import slug from 'mongoose-slug-generator';
-
-mongoose.plugin(slug);
 
 const PostSchema = new Schema({
   title: { type: String, required: true, max: 250 },
@@ -16,12 +13,6 @@ const PostSchema = new Schema({
   likes: { type: Number, required: true, default: 0 },
 });
 
-// virtual for slug url
-
-PostSchema.virtual('slug').get(function () {
-  return mongoose.plugin(slug);
-});
-
 // virtual for comment count
 PostSchema.virtual('comment_count').get(function () {
   return this.comment_array.length;
@@ -29,8 +20,12 @@ PostSchema.virtual('comment_count').get(function () {
 
 // virtual for post age
 
-PostSchema.virtual('post_age').get(function () {
+/* PostSchema.virtual('post_age_published').get(function () {
   return Date.now() - this.published_timestamp;
+}); */
+
+PostSchema.virtual('post_age_created').get(function () {
+  return Date.now() - this.created_timestamp;
 });
 
 export default mongoose.model('Post', PostSchema);

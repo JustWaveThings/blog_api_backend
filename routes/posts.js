@@ -8,7 +8,7 @@ router.get('/', post_controller.post_list_overview);
 
 // get single post (with body and comments)
 
-router.get('/:postid', post_controller.post_detail);
+router.get('/:id', post_controller.post_detail);
 
 // create post
 

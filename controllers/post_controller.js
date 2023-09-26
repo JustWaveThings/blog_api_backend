@@ -12,9 +12,9 @@ export const post_list_overview = asyncHandler(async (req, res) => {
 // get single post (with body and comments)
 
 export const post_detail = asyncHandler(async (req, res) => {
-  console.log(req.params.postid);
-  const post = await Post.findById(req.params.postid);
-  res.json({ post });
+  console.log(req.params.id);
+  const post = await Post.findById(req.params.id);
+  res.json(post);
 });
 
 // create post

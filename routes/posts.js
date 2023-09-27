@@ -16,15 +16,15 @@ router.post('/', post_controller.create_post);
 
 // update post
 
-router.put('/:postid', post_controller.update_post);
+router.put('/:id', post_controller.update_post);
 
 // delete post
 
-router.delete('/:postid', post_controller.delete_post);
+router.delete('/:id', post_controller.delete_post);
 
 // create a comment
 
-router.post('/:postid/comment', comment_controller.create_comment);
+router.post('/:id/comment', comment_controller.create_comment);
 
 // update comment (so it can be flagged as inappropriate / update likes)
 

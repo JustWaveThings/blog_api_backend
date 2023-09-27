@@ -56,7 +56,7 @@ PostSchema.virtual('post_age_published').get(function () {
 
 PostSchema.virtual('post_age_created').get(function () {
   return this.created_timestamp
-    ? DateTime.fromJSDate(this.created_timestamp)
+    ? +DateTime.fromJSDate(this.created_timestamp)
         .until(DateTime.now())
         .toDuration('days')
         .toObject()

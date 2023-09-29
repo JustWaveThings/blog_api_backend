@@ -1,6 +1,7 @@
 import Post from '../models/posts';
 import { body, validationResult } from 'express-validator';
 import asyncHandler from 'express-async-handler';
+import validator from 'validator';
 
 // get all posts overview (no body, just metadata)
 export const post_list_overview = asyncHandler(async (req, res) => {
@@ -17,6 +18,7 @@ export const post_detail = asyncHandler(async (req, res) => {
     'comment_array',
     '-parent_post -__v, -reported'
   );
+
   res.json(post);
 });
 
@@ -26,8 +28,10 @@ export const create_post = [
   // validate and sanitize fields
   body('title', 'Title required').trim().isLength({ min: 1 }).escape(),
   body('body', 'Body required').trim().isLength({ min: 1 }).escape(),
-  body('subtitle', 'Subtitle required').trim().isLength({ min: 1 }).escape(),
-  body('published').trim().escape(),
+  body('subtitle', 'Subtitle required')
+    .isLength({ min: 1, max: 3000 })
+    .escape(),
+  body('published').escape(),
 
   asyncHandler(async (req, res) => {
     console.log(req.body);
@@ -54,7 +58,7 @@ export const update_post = asyncHandler(async (req, res) => {
   res.json({ message: 'Update Post not yet implmented' });
 });
 
-// delete post
+// delete post // admin route
 
 export const delete_post = asyncHandler(async (req, res) => {
   const post = await Post.findByIdAndRemove(req.params.postid);

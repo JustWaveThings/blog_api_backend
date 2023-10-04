@@ -1,4 +1,4 @@
-import Post from '../models/posts';
+import Post from '../models/posts.js';
 import { body, validationResult } from 'express-validator';
 import asyncHandler from 'express-async-handler';
 import validator from 'validator';
@@ -13,7 +13,6 @@ export const post_list_overview = asyncHandler(async (req, res) => {
 // get single post (with body and comments)
 
 export const post_detail = asyncHandler(async (req, res) => {
-  console.log(req.params.id);
   const post = await Post.findById(req.params.id).populate(
     'comment_array',
     '-parent_post -__v, -reported'
@@ -37,7 +36,7 @@ export const create_post = [
     console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.json({ errors });
+      return res.send({ errors });
     }
     const post = new Post({
       title: req.body.title,

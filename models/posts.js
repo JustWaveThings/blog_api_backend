@@ -12,7 +12,6 @@ const PostSchema = new Schema(
     updated_timestamp: { type: Date, required: false },
     published_timestamp: { type: Date, required: false },
     comment_array: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-    likes: { type: Number, required: true, default: 0 },
   },
   { toJSON: { virtuals: true } }
 );

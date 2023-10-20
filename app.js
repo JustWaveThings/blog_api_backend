@@ -17,7 +17,8 @@ import rateLimit from './utils/rateLimit';
 
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
-import postsRouter from './routes/posts';
+import postsRouter from './routes/frontend';
+import authorRouter from './routes/author';
 
 const app = express();
 
@@ -60,6 +61,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
+app.use('/author', authorRouter);
 
 app.use(compression()); //Compress all routes
 

@@ -1,2 +1,2 @@
 # blog_api_backend
-backend repo for blog api project - http://localhost:3000/lessons/nodejs-blog-api
+backend repo for blog api project - [NodeJS Blog API project](https://www.theodinproject.com/lessons/nodejs-blog-api)

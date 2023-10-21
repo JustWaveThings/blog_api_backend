@@ -3,10 +3,17 @@ import { body, validationResult } from 'express-validator';
 import asyncHandler from 'express-async-handler';
 import validator from 'validator';
 
-// get all posts overview (no body, just metadata)
+// get published posts overview (no body, just metadata)
 export const post_list_overview = asyncHandler(async (req, res) => {
   // exclude posts with the published flag set to false
   const posts = await Post.find({ published: true }, '-body ');
+  res.json({ posts });
+});
+
+// for author view
+export const author_post_list_overview = asyncHandler(async (req, res) => {
+  const posts = await Post.find({});
+  console.log(posts);
   res.json({ posts });
 });
 

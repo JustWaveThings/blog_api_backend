@@ -4,7 +4,7 @@ import * as post_controller from '../controllers/post_controller';
 import * as comment_controller from '../controllers/comment_controller';
 
 // get all posts overview (no body, just metadata)
-router.get('/', post_controller.post_list_overview);
+router.get('/', post_controller.author_post_list_overview);
 
 // get single post (with body and comments)
 

@@ -12,7 +12,8 @@ export const post_list_overview = asyncHandler(async (req, res) => {
 
 // for author view
 export const author_post_list_overview = asyncHandler(async (req, res) => {
-  const posts = await Post.find('-body ');
+  const posts = await Post.find({});
+  console.log(posts);
   res.json({ posts });
 });
 

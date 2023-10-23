@@ -71,8 +71,8 @@ export const update_post = asyncHandler(async (req, res) => {
 // delete post // admin route
 
 export const delete_post = asyncHandler(async (req, res) => {
-  const post = await Post.findByIdAndRemove(req.params.postid);
-  if (post && post._id.toString() === req.params.postid) {
+  const post = await Post.findByIdAndRemove(req.params.id);
+  if (post && post._id.toString() === req.params.id) {
     res.json({ message: 'Post Successfully Deleted.' });
   } else {
     res.json({ message: 'There was an error.' });

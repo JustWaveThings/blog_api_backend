@@ -3,20 +3,20 @@ const router = express.Router();
 import * as post_controller from '../controllers/post_controller';
 import * as comment_controller from '../controllers/comment_controller';
 
-// get all posts overview (no body, just metadata)
+// get all posts overview
 router.get('/', post_controller.author_post_list_overview);
 
-// get single post (with body and comments)
+// get single post (with comments)
 
 router.get('/:id', post_controller.post_detail);
 
 // create post
 
-router.post('/', post_controller.create_post);
+router.post('/post', post_controller.create_post);
 
 // update post
 
-router.put('/:id', post_controller.update_post);
+router.patch('/:id', post_controller.update_post);
 
 // delete post
 
@@ -25,10 +25,6 @@ router.delete('/:id', post_controller.delete_post);
 // create a comment
 
 router.post('/:id/comment', comment_controller.create_comment);
-
-// update comment (so it can be flagged as inappropriate / update likes)
-
-router.put('/:postid/comment/:commentid', comment_controller.update_comment);
 
 // delete comment
 

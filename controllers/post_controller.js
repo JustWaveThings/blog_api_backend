@@ -39,7 +39,6 @@ export const create_post = [
   body('published').escape(),
 
   asyncHandler(async (req, res) => {
-    console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.send({ errors });
@@ -59,8 +58,14 @@ export const create_post = [
 // update post // save for later.... may wait until I have a form....
 
 export const update_post = asyncHandler(async (req, res) => {
-  // const post = await Post.findById(req.params.postid);
-  res.json({ message: 'Update Post not yet implmented' });
+  const post = await Post.findOneAndUpdate(
+    { _id: req.params.id },
+    { published: req.body.published },
+    {
+      new: true,
+    }
+  );
+  res.json({ message: post });
 });
 
 // delete post // admin route

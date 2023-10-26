@@ -55,12 +55,30 @@ export const create_post = [
   }),
 ];
 
-// update post // save for later.... may wait until I have a form....
+// update post publish state
 
 export const update_post = asyncHandler(async (req, res) => {
   const post = await Post.findOneAndUpdate(
     { _id: req.params.id },
     { published: req.body.published },
+    {
+      new: true,
+    }
+  );
+  res.json({ message: post });
+});
+
+// update whole post
+
+export const update_whole_post = asyncHandler(async (req, res) => {
+  const post = await Post.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      title: req.body.title,
+      body: req.body.body,
+      subtitle: req.body.subtitle,
+      published: req.body.published,
+    },
     {
       new: true,
     }

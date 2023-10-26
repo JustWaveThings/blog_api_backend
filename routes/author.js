@@ -14,9 +14,13 @@ router.get('/:id', post_controller.post_detail);
 
 router.post('/post', post_controller.create_post);
 
-// update post
+// update post publish state
 
 router.patch('/:id', post_controller.update_post);
+
+// update whole post
+
+router.put('/:id', post_controller.update_whole_post);
 
 // delete post
 

@@ -59,3 +59,10 @@ export const update_user = [
     return res.json({ message: `User -${db.username}- updated successfully` });
   }),
 ];
+
+// login user
+
+export const login_user = asyncHandler(async (req, res, next) => {
+  console.log(req.body);
+  res.json({ message: 'login user route hit succesfully' });
+});

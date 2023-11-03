@@ -14,4 +14,8 @@ router.post('/', user_controller.create_user);
 
 router.put('/:userid', user_controller.update_user);
 
+// login user
+
+router.post('/login', user_controller.login_user);
+
 export default router;

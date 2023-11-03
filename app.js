@@ -7,13 +7,12 @@ import compression from 'compression';
 import helmet from 'helmet';
 import cors from 'cors';
 import createErrors from 'http-errors';
-// import passport from 'passport';
 import session from 'express-session';
 import MongoStore from 'connect-mongodb-session';
-
+import passport from 'passport';
 import database from './utils/database';
 import rateLimit from './utils/rateLimit';
-// import passportConfig from './utils/passport';
+import './utils/passport';
 
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
@@ -49,10 +48,22 @@ store.on('error', function (error) {
 
 // Passport
 
-// app.use(passport.initialize());
-// app.use(passport.session());
-app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    store: store,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+    },
+  })
+);
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(logger('dev'));
 

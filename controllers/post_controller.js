@@ -13,7 +13,16 @@ export const post_list_overview = asyncHandler(async (req, res) => {
 // get all posts published and unpublished for author view
 export const author_post_list_overview = asyncHandler(async (req, res) => {
   const posts = await Post.find({});
-  res.json({ posts });
+
+  if (req.session.viewCount) {
+    req.session.viewCount = req.session.viewCount + 1;
+  } else {
+    req.session.viewCount = 1;
+  }
+  res.json({
+    message: `login user route hit succesfully ${req.session.viewCount} times`,
+    posts,
+  });
 });
 
 // get single post (with body and comments)

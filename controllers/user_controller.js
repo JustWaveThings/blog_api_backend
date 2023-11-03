@@ -5,8 +5,19 @@ import asyncHandler from 'express-async-handler';
 // get user
 
 export const get_user = asyncHandler(async (req, res, next) => {
-  const users = await User.find({}).select('username admin -_id').exec();
-  return res.json({ users });
+  if (req.session.viewCount) {
+    console.log('viewCount exists');
+    req.session.viewCount++;
+  } else {
+    console.log('viewCount does not exist');
+    req.session.viewCount = 1;
+  }
+  //  await req.session.save(); // save the session after updating the view count
+  console.log(req.session);
+  // const users = await User.find({}).select('username admin -_id').exec();
+  return res.json({
+    message: `login user route hit succesfully ${req.session.viewCount} times`,
+  });
 });
 
 // create user
@@ -63,6 +74,9 @@ export const update_user = [
 // login user
 
 export const login_user = asyncHandler(async (req, res, next) => {
-  console.log(req.body);
-  res.json({ message: 'login user route hit succesfully' });
+  console.log(req.session);
+  req.session.viewCount ? req.session.viewCount++ : (req.session.viewCount = 1);
+  res.json({
+    message: `login user route hit succesfully ${req.session.viewCount} times`,
+  });
 });

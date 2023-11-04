@@ -31,17 +31,17 @@ app.use(
   })
 ); //Enable CORS
 
-// app.use(rateLimit); //Rate Limiting
+app.use(rateLimit); //Rate Limiting
 
 app.use(database); //Database Connection
 
-/* app.use(
+app.use(
   helmet.contentSecurityPolicy({
     directives: {
       'script-src': 'self',
     },
   })
-); */
+);
 
 const MongoStoreSession = MongoStore(session);
 

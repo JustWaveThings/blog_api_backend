@@ -12,7 +12,7 @@ passport.use(
 
       if (!user) {
         return done(null, false, {
-          message: 'Incorrect username or User not found',
+          message: 'User not found',
         });
       }
 
@@ -44,7 +44,7 @@ passport.deserializeUser(async function (id, done) {
   }
 });
 
-export const passportAuth = passport.authenticate('local', {
+passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login',
   failureMessage: true,

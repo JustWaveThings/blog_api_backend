@@ -56,8 +56,6 @@ store.on('error', function (error) {
 
 // Passport
 
-// app.use(passport.initialize());
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
@@ -75,9 +73,12 @@ app.use(
     },
   })
 );
+
+app.use(passport.initialize());
+
 app.use((req, res, next) => {
   console.log(
-    req.session.viewCount ? req.session.viewCount : '',
+    req.session.viewCount ? req.session.viewCount : 'viewcount not found',
     ' ---- ',
     req.sessionID,
     req.session

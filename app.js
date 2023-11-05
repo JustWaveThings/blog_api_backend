@@ -7,13 +7,12 @@ import compression from 'compression';
 import helmet from 'helmet';
 import cors from 'cors';
 import createErrors from 'http-errors';
-// import passport from 'passport';
 import session from 'express-session';
 import MongoStore from 'connect-mongodb-session';
-
+import passport from 'passport';
 import database from './utils/database';
 import rateLimit from './utils/rateLimit';
-// import passportConfig from './utils/passport';
+// import './utils/passport';
 
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
@@ -22,7 +21,15 @@ import authorRouter from './routes/author';
 
 const app = express();
 
-app.use(cors()); //Enable CORS
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    credentials: true,
+  })
+); //Enable CORS
 
 app.use(rateLimit); //Rate Limiting
 
@@ -49,14 +56,36 @@ store.on('error', function (error) {
 
 // Passport
 
-// app.use(passport.initialize());
-// app.use(passport.session());
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    store: store,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+    },
+  })
+);
+
+app.use(passport.initialize());
+
+app.use((req, res, next) => {
+  console.log(
+    req.session.viewCount ? req.session.viewCount : 'viewcount not found',
+    ' ---- ',
+    req.sessionID,
+    req.session
+  );
+
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -64,7 +93,6 @@ app.use('/posts', postsRouter);
 app.use('/author', authorRouter);
 
 app.use(compression()); //Compress all routes
-
 app.use(function (req, res, next) {
   next(createErrors(404));
 });

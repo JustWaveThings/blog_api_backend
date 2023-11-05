@@ -2,16 +2,16 @@ import express from 'express';
 const router = express.Router();
 import * as user_controller from '../controllers/user_controller.js';
 
-// get user
-
-router.get('/', user_controller.get_user);
-
 // create user
 
-router.post('/', user_controller.create_user);
+router.post('/signup', user_controller.create_user);
 
-// update user
+// login user
 
-router.put('/:userid', user_controller.update_user);
+router.post('/login', user_controller.login_user);
+
+// logout user
+
+router.post('/logout', user_controller.logout_user);
 
 export default router;

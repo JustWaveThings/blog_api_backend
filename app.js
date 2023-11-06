@@ -65,11 +65,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     store: store,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // 1 day
+      httpOnly: false,
     },
   })
 );
@@ -79,9 +80,9 @@ app.use((req, res, next) => {
     req.session.viewCount ? req.session.viewCount : 'viewcount not found',
     ' ---- ',
     req.sessionID,
-    req.session
+    req.session,
+    req?.user
   );
-
   next();
 });
 

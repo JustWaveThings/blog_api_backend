@@ -8,10 +8,10 @@ router.post('/signup', user_controller.create_user);
 
 // login user
 
-router.post('/login', user_controller.login_user);
+router.post('/', user_controller.login_user);
 
 // logout user
 
-router.post('/logout', user_controller.logout_user);
+router.get('/logout', user_controller.logout_user);
 
 export default router;

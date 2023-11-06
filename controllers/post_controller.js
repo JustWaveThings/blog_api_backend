@@ -50,7 +50,7 @@ export const create_post = [
       published: req.body.published,
       created_timestamp: Date.now(),
     });
-    const db = await post.save();
+    await post.save();
     res.json({ message: 'Post Successfully Created' });
   }),
 ];

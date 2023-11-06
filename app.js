@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
 import path from 'path';
-
 import logger from 'morgan';
 import compression from 'compression';
 import helmet from 'helmet';
@@ -13,13 +12,18 @@ import passport from 'passport';
 import database from './utils/database';
 import rateLimit from './utils/rateLimit';
 import './utils/passport';
-
+import { isAuth } from './utils/authMiddleware';
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
 import postsRouter from './routes/frontend';
 import authorRouter from './routes/author';
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(logger('dev'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
   cors({
@@ -54,13 +58,7 @@ store.on('error', function (error) {
   console.log(error);
 });
 
-// Passport
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(logger('dev'));
-
-app.use(express.static(path.join(__dirname, 'public')));
+// express session
 
 app.use(
   session({
@@ -75,14 +73,19 @@ app.use(
   })
 );
 
+// passport
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// custom logging middleware for dev
 app.use((req, res, next) => {
-  console.log(
-    req.session.viewCount ? req.session.viewCount : 'viewcount not found',
-    ' ---- ',
-    req.sessionID,
-    req.session,
-    req?.user
-  );
+  if (req.session.pageViewCount) {
+    req.session.pageViewCount++;
+  } else {
+    req.session.pageViewCount = 1;
+  }
+  console.log(req.session, req?.user);
   next();
 });
 
@@ -91,11 +94,13 @@ app.use(passport.initialize());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
-app.use('/author', authorRouter);
+app.use('/author', isAuth, authorRouter);
 
-app.use(compression()); //Compress all routes
-app.use(function (req, res, next) {
-  next(createErrors(404));
+//Compress all routes
+app.use(compression());
+
+app.use(function (err, req, res, next) {
+  next(createErrors(err));
 });
 
 export default app;

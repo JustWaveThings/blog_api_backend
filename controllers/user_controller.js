@@ -2,9 +2,10 @@ import User from '../models/users';
 import { body, validationResult } from 'express-validator';
 import asyncHandler from 'express-async-handler';
 import passport from 'passport';
+import bcrypt from 'bcryptjs';
 import '../utils/passport';
-// create user
 
+// create user
 export const create_user = [
   // validate and sanitize fields
   body('username', 'Username required').trim().isLength({ min: 1 }).escape(),
@@ -24,34 +25,39 @@ export const create_user = [
       return res.json({ message: 'User already exists.' });
     }
 
-    const user = new User({
-      username: req.body.username,
-      password: req.body.password,
-      admin: true,
+    bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
+      if (err) {
+        return next(err);
+      }
+      try {
+        const user = new User({
+          username: req.body.username,
+          password: hashedPassword,
+          admin: true,
+        });
+        const db = await user.save();
+        return res.json({
+          message: `User - ${db.username} created successfully`,
+        });
+      } catch (err) {
+        next(err);
+      }
     });
-    const db = await user.save();
-    return res.json({ message: `User - ${db.username} created successfully` });
   }),
 ];
 
 // login user
-
-export const login_user = asyncHandler(async (req, res, next) => {
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureMessage: true,
-  });
-
-  res.json({
-    message: `login user route hit successfully`,
-  });
+export const login_user = passport.authenticate('local', {
+  failureRedirect: '/login',
+  failureMessage: true,
 });
 
 // logout user
-
-export const logout_user = asyncHandler(async (req, res, next) => {
-  res.json({
-    message: `logout user route hit successfully`,
+export const logout_user = (req, res, next) => {
+  req.logout(err => {
+    if (err) {
+      return next(err);
+    }
+    res.clearCookie('loggedIn');
   });
-});
+};

@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import express, { raw } from 'express';
+import express from 'express';
 import path from 'path';
 import logger from 'morgan';
 import compression from 'compression';
@@ -23,7 +23,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
@@ -69,6 +68,7 @@ app.use(
     store: store,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // 1 day
+      httpOnly: false,
     },
   })
 );
@@ -94,9 +94,11 @@ app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 app.use('/author', isAuth, authorRouter);
 
-app.use(compression()); //Compress all routes
-app.use(function (req, res, next) {
-  next(createErrors(404));
+//Compress all routes
+app.use(compression());
+
+app.use(function (err, req, res, next) {
+  next(createErrors(err));
 });
 
 export default app;

@@ -43,9 +43,3 @@ passport.deserializeUser(async function (id, done) {
     done(error);
   }
 });
-
-passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureMessage: true,
-});

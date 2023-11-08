@@ -1,16 +1,17 @@
+/* eslint-disable no-dupe-keys */
 import User from '../models/users';
 import { body, validationResult } from 'express-validator';
 import asyncHandler from 'express-async-handler';
 import passport from 'passport';
 import bcrypt from 'bcryptjs';
 import '../utils/passport';
+import { session } from 'express-session';
 
 // create user
 export const create_user = [
   // validate and sanitize fields
   body('username', 'Username required').trim().isLength({ min: 1 }).escape(),
   body('password', 'Password required').trim().isLength({ min: 1 }).escape(),
-  body('admin').trim().isBoolean().escape(),
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
@@ -33,7 +34,6 @@ export const create_user = [
         const user = new User({
           username: req.body.username,
           password: hashedPassword,
-          admin: true,
         });
         const db = await user.save();
         return res.json({
@@ -47,10 +47,16 @@ export const create_user = [
 ];
 
 // login user
-export const login_user = passport.authenticate('local', {
-  failureRedirect: '/login',
-  failureMessage: true,
-});
+export const login_user = [
+  // validate and sanitize fields
+  body('username', 'Username required').trim().isLength({ min: 1 }).escape(),
+  body('password', 'Password required').trim().isLength({ min: 1 }).escape(),
+
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: null,
+  }),
+];
 
 // logout user
 export const logout_user = (req, res, next) => {
@@ -58,6 +64,13 @@ export const logout_user = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.clearCookie('loggedIn');
+    req.session.cookie.user = '';
   });
+  res.status(200).json('Logout successful');
+};
+
+// redirect to login page
+
+export const redirect_to_login = (req, res) => {
+  res.redirect('/');
 };

@@ -8,10 +8,14 @@ router.post('/signup', user_controller.create_user);
 
 // login user
 
-router.post('/', user_controller.login_user);
+router.post('/login', user_controller.login_user);
+
+// redirect to login page
+
+router.get('/login', user_controller.redirect_to_login);
 
 // logout user
 
-router.get('/logout', user_controller.logout_user);
+router.delete('/logout', user_controller.logout_user);
 
 export default router;

@@ -1,11 +1,11 @@
 import 'dotenv/config';
 import express from 'express';
 import path from 'path';
-import logger from 'morgan';
 import compression from 'compression';
 import helmet from 'helmet';
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import createErrors from 'http-errors';
 import session from 'express-session';
 import MongoStore from 'connect-mongodb-session';
 import passport from 'passport';
@@ -17,13 +17,13 @@ import indexRouter from './routes/index';
 import usersRouter from './routes/users';
 import postsRouter from './routes/frontend';
 import authorRouter from './routes/author';
+import { asyncHandler } from 'express-async-handler';
+
+// Create the Express application object
 
 const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(logger('dev'));
-app.use(express.static(path.join(__dirname, 'public')));
+// Enable CORS
 
 app.use(
   cors({
@@ -33,11 +33,13 @@ app.use(
     optionsSuccessStatus: 204,
     credentials: true,
   })
-); //Enable CORS
+);
 
-app.use(rateLimit); //Rate Limiting
+// Database Connection
 
-app.use(database); //Database Connection
+app.use(database);
+
+// Helmet CSP
 
 app.use(
   helmet.contentSecurityPolicy({
@@ -47,6 +49,7 @@ app.use(
   })
 );
 
+// session store
 const MongoStoreSession = MongoStore(session);
 
 const store = new MongoStoreSession({
@@ -74,33 +77,62 @@ app.use(
 );
 
 // passport
-
 app.use(passport.initialize());
 app.use(passport.session());
-
-// custom logging middleware for dev
-app.use((req, res, next) => {
-  if (req.session.pageViewCount) {
-    req.session.pageViewCount++;
-  } else {
-    req.session.pageViewCount = 1;
-  }
-  console.log(req.session, req?.user);
-  next();
-});
-
-app.use(passport.initialize());
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/posts', postsRouter);
-app.use('/author', isAuth, authorRouter);
+app.use(express.urlencoded({ extended: false }));
 
 //Compress all routes
 app.use(compression());
 
-app.use(function (err, req, res, next) {
-  next(createErrors(err));
+// parse cookies
+
+// app.use(cookieParser({ secret: process.env.SESSION_SECRET }));
+
+// request loggging middleware
+
+app.use(morgan('tiny'));
+
+// parse application/json
+
+app.use(express.json());
+
+// serve static files
+
+// app.use(express.static(path.join(__dirname, 'public')));
+
+// Rate Limiting
+
+// app.use(rateLimit);
+
+// custom logging middleware
+
+app.use((req, res, next) => {
+  if (req.session.passport?.user) {
+    req.session.cookie.user = 'loggedIn';
+  }
+  next();
 });
+
+app.use((req, res, next) => {
+  console.log(req.session);
+  console.log(req.user);
+  next();
+});
+
+// routes
+
+app.use('/users', usersRouter);
+app.use('/posts', postsRouter);
+app.use('/author', authorRouter);
+app.use('/', indexRouter);
+
+// error catcher
+
+function errorHandler(err, req, res, next) {
+  console.log(err);
+  res.status(err.status || 500).json(err);
+}
+
+app.use(errorHandler);
 
 export default app;

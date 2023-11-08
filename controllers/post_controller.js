@@ -41,7 +41,7 @@ export const create_post = [
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.send({ errors });
+      return res.json({ errors });
     }
     const post = new Post({
       title: req.body.title,

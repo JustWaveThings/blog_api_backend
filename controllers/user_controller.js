@@ -47,13 +47,10 @@ export const create_user = [
 ];
 
 // login user
-export const login_user = [
-  // validate and sanitize fields
-  body('username', 'Username required').trim().isLength({ min: 1 }).escape(),
-  body('password', 'Password required').trim().isLength({ min: 1 }).escape(),
-
-  passport.authenticate('local'),
-];
+export const login_user = (req, res, next) => {
+  // passport.authenticate('local');
+  res.json('Login successful');
+};
 
 // logout user
 export const logout_user = (req, res, next) => {

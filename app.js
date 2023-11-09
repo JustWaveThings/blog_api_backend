@@ -107,13 +107,6 @@ app.use(express.json());
 // custom logging middleware
 
 app.use((req, res, next) => {
-  if (req.session.passport?.user) {
-    req.session.cookie.user = 'loggedIn';
-  }
-  next();
-});
-
-app.use((req, res, next) => {
   console.log(req.session);
   console.log(req.user);
   next();

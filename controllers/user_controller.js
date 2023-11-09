@@ -52,10 +52,7 @@ export const login_user = [
   body('username', 'Username required').trim().isLength({ min: 1 }).escape(),
   body('password', 'Password required').trim().isLength({ min: 1 }).escape(),
 
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: null,
-  }),
+  passport.authenticate('local'),
 ];
 
 // logout user
@@ -64,7 +61,6 @@ export const logout_user = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    req.session.cookie.user = '';
   });
   res.status(200).json('Logout successful');
 };

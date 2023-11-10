@@ -5,7 +5,6 @@ import asyncHandler from 'express-async-handler';
 import passport from 'passport';
 import bcrypt from 'bcryptjs';
 import '../utils/passport';
-import { session } from 'express-session';
 
 // create user
 export const create_user = [
@@ -47,20 +46,29 @@ export const create_user = [
 ];
 
 // login user
-export const login_user = (req, res, next) => {
-  // passport.authenticate('local');
-  res.json('Login successful');
+export const login_user = function (req, res, next) {
+  // log out a user if logged in so frontend and backend are in sync
+  if (req.user) {
+    req.logout(err => {
+      if (err) {
+        return next(err);
+      }
+    });
+  }
+  // return success status if
+  res.status(200).json({ message: 'Login successful' });
+  next();
 };
 
 // logout user
-export const logout_user = (req, res, next) => {
+export function logout_user(req, res, next) {
   req.logout(err => {
     if (err) {
       return next(err);
     }
   });
   res.status(200).json('Logout successful');
-};
+}
 
 // redirect to login page
 

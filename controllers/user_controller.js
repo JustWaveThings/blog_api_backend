@@ -44,9 +44,7 @@ export const create_user = [
 
 // login user
 export const login_user = function (req, res, next) {
-  // log out a user if logged in so frontend and backend are in sync
-  // return success status if
-  res.status(200).json({ message: 'Login successful' });
+  res.status(201).json({ username: req.user.username });
 };
 
 // logout user

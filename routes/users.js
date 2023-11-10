@@ -1,7 +1,8 @@
 import express from 'express';
-const router = express.Router();
 import * as user_controller from '../controllers/user_controller.js';
+const router = express.Router();
 import passport from 'passport';
+import '../utils/passport';
 
 // create user
 

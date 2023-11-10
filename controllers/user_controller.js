@@ -2,9 +2,6 @@
 import User from '../models/users';
 import { body, validationResult } from 'express-validator';
 import asyncHandler from 'express-async-handler';
-import passport from 'passport';
-import bcrypt from 'bcryptjs';
-import '../utils/passport';
 
 // create user
 export const create_user = [
@@ -48,16 +45,8 @@ export const create_user = [
 // login user
 export const login_user = function (req, res, next) {
   // log out a user if logged in so frontend and backend are in sync
-  if (req.user) {
-    req.logout(err => {
-      if (err) {
-        return next(err);
-      }
-    });
-  }
   // return success status if
   res.status(200).json({ message: 'Login successful' });
-  next();
 };
 
 // logout user
@@ -69,9 +58,3 @@ export function logout_user(req, res, next) {
   });
   res.status(200).json('Logout successful');
 }
-
-// redirect to login page
-
-export const redirect_to_login = (req, res) => {
-  res.redirect('/');
-};

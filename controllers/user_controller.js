@@ -2,6 +2,7 @@
 import User from '../models/users';
 import { body, validationResult } from 'express-validator';
 import asyncHandler from 'express-async-handler';
+import bcrypt from 'bcryptjs';
 
 // create user
 export const create_user = [
@@ -44,7 +45,7 @@ export const create_user = [
 
 // login user
 export const login_user = function (req, res, next) {
-  res.status(201).json({ username: req.user.username });
+  res.status(201).json({ username: req.user.username, user: req.user });
 };
 
 // logout user

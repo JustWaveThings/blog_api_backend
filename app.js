@@ -58,7 +58,7 @@ const store = new MongoStoreSession({
 });
 
 store.on('error', function (error) {
-  console.log(error);
+  console.log(error, ' in mongo store');
 });
 
 // express session
@@ -108,8 +108,8 @@ app.use(express.json());
 // custom logging middleware
 
 app.use((req, res, next) => {
-  console.log(req.session);
-  console.log(req.user);
+  console.log(req.session, 'req session');
+  console.log(req.user, ' req user');
   next();
 });
 
@@ -123,7 +123,7 @@ app.use('/', indexRouter);
 // error catcher
 
 function errorHandler(err, req, res, next) {
-  console.log(err);
+  console.log(err, 'app.js catchall error handler');
   res.status(err.status || 500).json(err);
 }
 

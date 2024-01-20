@@ -108,8 +108,8 @@ app.use(express.json());
 // custom logging middleware
 
 app.use((req, res, next) => {
-  console.log(req.session, 'req session');
-  console.log(req.user, ' req user');
+  console.log(req.session, ' - req session');
+  console.log(req.user, ' - req user');
   next();
 });
 
